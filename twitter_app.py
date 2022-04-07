@@ -1,5 +1,4 @@
-from tweepy import API
-from tweepy import OAuthHandler
+from tweepy import API, OAuth1UserHandler
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,22 +6,19 @@ import numpy as np
 
 import credentials
 
-class TwitterClient(object):
-    def __init__(self):
-        # do the authentication and return the API object
-        auth = OAuthHandler(credentials.API_KEY, credentials.API_SECRET)
-        auth.set_access_token(credentials.ACCESS_TOKEN, credentials.ACCESS_SECRET)
-        self.auth = auth
-        self.api = API(self.auth)
 
-    def get_twitter_client_api(self):
-        return self.api
+def TwitterClient():
+    # do the authentication and return the API object
+    auth = OAuth1UserHandler(credentials.API_KEY, credentials.API_SECRET, credentials.ACCESS_TOKEN, credentials.ACCESS_SECRET)
+    api = API(auth)
+
+    print(api.verify_credentials().screen_name)
+    return api
+
 
 if __name__ == '__main__':
-
-    twitter_client = TwitterClient()
-    twitter_api = twitter_client.get_twitter_client_api()
-    people = ["FreeMemesKids", "neymarjr", "lilpump", "cristiano", "realDonaldtrump", "pewdiepie", "kimkardashian"]
+    twitter_api = TwitterClient()
+    people = ["neymarjr", "lilpump", "cristiano", "kimkardashian", "elonmusk"]
     count = 100
 
     tweets = {}
@@ -46,14 +42,15 @@ if __name__ == '__main__':
 
     # print(dfs)
 
-    # display a graph of average retweets
+    # display a graph of average favorites
     y_pos = np.arange(len(people))
-    average_ret = []
+    average = []
     for ppl in people:
-        average_ret.append(dfs[ppl]["Retweets"].max())
+        average.append(np.average(dfs[ppl]['Favorites'].values))
+        print(f"\b\n{ppl} most favorites tweet: \n {dfs[ppl]['Text'][np.argmax(dfs[ppl]['Favorites'].values)]}\n Number of favorites {np.max(dfs[ppl]['Favorites'].values)}")
 
-    plt.bar(y_pos, average_ret, align='center', alpha=0.5)
+    plt.bar(y_pos, average, align='center', alpha=0.8)
     plt.xticks(y_pos, people)
-    plt.ylabel('Retweets')
-    plt.title('Most famous on Twitter based on past retweets')
+    plt.ylabel('Favorites')
+    plt.title('Most famous on Twitter based on past favorites')
     plt.show()
