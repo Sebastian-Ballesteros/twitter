@@ -2,10 +2,9 @@ from tweepy import API, OAuth1UserHandler
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
-
 import credentials
 
+count = 10
 
 def TwitterClient():
     # do the authentication and return the API object
@@ -19,7 +18,6 @@ def TwitterClient():
 if __name__ == '__main__':
     twitter_api = TwitterClient()
     people = ["neymarjr", "lilpump", "cristiano", "kimkardashian", "elonmusk"]
-    count = 100
 
     tweets = {}
     for ppl in people:
