@@ -6,6 +6,7 @@ import credentials
 
 count = 10
 
+
 def TwitterClient():
     # do the authentication and return the API object
     auth = OAuth1UserHandler(credentials.API_KEY, credentials.API_SECRET, credentials.ACCESS_TOKEN, credentials.ACCESS_SECRET)
@@ -17,7 +18,7 @@ def TwitterClient():
 
 if __name__ == '__main__':
     twitter_api = TwitterClient()
-    people = ["neymarjr", "lilpump", "cristiano", "kimkardashian", "elonmusk"]
+    people = ["neymarjr", "cristiano", "kimkardashian", "elonmusk"]
 
     tweets = {}
     for ppl in people:
@@ -45,7 +46,7 @@ if __name__ == '__main__':
     average = []
     for ppl in people:
         average.append(np.average(dfs[ppl]['Favorites'].values))
-        print(f"\b\n{ppl} most favorites tweet: \n {dfs[ppl]['Text'][np.argmax(dfs[ppl]['Favorites'].values)]}\n Number of favorites {np.max(dfs[ppl]['Favorites'].values)}")
+        print(f"\b\n{ppl} most favorites tweet: \n {dfs[ppl]['Text'][np.argmax(dfs[ppl]['Favorites'])]}\n Number of favorites {np.max(dfs[ppl]['Favorites'])}")
 
     plt.bar(y_pos, average, align='center', alpha=0.8)
     plt.xticks(y_pos, people)
